@@ -1,5 +1,11 @@
 # shopping_cart.py
 
+import datetime
+
+now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+def to_usd(p):
+    return "${0:,.2f}".format(p)
 
 #from pprint import pprint
 
@@ -28,31 +34,49 @@ products = [
 
 # INPUT
 
-total_price = 0
+subtotal_price = 0
+
+valid_ids = [str(p["id"]) for p in products]
 selected_ids = []
 
 while True:
-    selected_id = input("Please input a product identifier:") #> "8" (string)
+    selected_id = input("Please input a product identifier, or 'DONE' if there are no more items:") #> "8" (string)
     if selected_id == "DONE":
         break
-    else: 
-        #matching_product = [p for p in products if str(p["id"]) == str(selected_id)]
-        #matching_product = matching_product[0]
-        #total_price = total_price + matching_product["price"]
-        #print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
+    elif str(selected_id) in valid_ids:
         selected_ids.append(selected_id)
-
+    else: 
+        print("OH, detected invalid input! Please try again...")
+        next
 
 
 # OUTPUT
 
 #print(selected_ids)
+print("---------------------------------")
+print("Whole Foods Market")
+print("https://www.wholefoodsmarket.com/")
+print("---------------------------------")
+print("CHECKOUT AT:" + str(now)) #> CHECKOUT AT: 2019-06-06 11:31 AM
+print("---------------------------------")
+
+print( "SELECTED PRODUCT:")
 for selected_id in selected_ids:
-    matching_product = [p for p in products if str(p["id"]) == str(selected_id)]
-    matching_product = matching_product[0]
-    total_price = total_price + matching_product["price"]
-    print("SELECTED PRODUCT:" + matching_product["name"] + " " + str(matching_product["price"]))
-print("TOTAL PRICE:", str(total_price)) 
+    matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
+    matching_product = matching_products[0]
+    subtotal_price = subtotal_price + matching_product["price"]
+    print("... " + matching_product["name"] + " " + "(" + to_usd(matching_product["price"]) + ")")
+
+
+tax_price = subtotal_price * 0.0875
+total_price = subtotal_price + tax_price
+print("---------------------------------")
+print("SUBTOTAL PRICE:", to_usd(subtotal_price)) 
+print("TAX:", to_usd(tax_price)) 
+print("TOTAL PRICE:", to_usd(total_price)) 
+print("---------------------------------")
+print("THANKS, SEE YOU AGAIN SOON!")
+print("---------------------------------")
 
 
 
