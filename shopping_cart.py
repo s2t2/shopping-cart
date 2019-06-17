@@ -97,7 +97,7 @@ while True:
         next
 
 
-# OUTPUT
+# OUTPUT/Display
 
 #print(selected_ids)
 print("---------------------------------")
